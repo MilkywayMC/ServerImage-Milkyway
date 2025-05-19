@@ -1,0 +1,18 @@
+services:
+  milkyway-main:
+    image: ghcr.io/malken21/docker-minecraft-paper:1.20.4-3
+    container_name: milkyway-main
+    restart: unless-stopped
+    volumes:
+      - "./main:/app"
+    environment:
+      - TZ=Asia/Tokyo
+      - LANG=ja_JP.UTF-8
+      - LANGUAGE=ja_JP:ja
+      - LC_ALL=ja_JP.UTF-8
+    stop_grace_period: 1m
+    networks:
+      - minecraft-network
+networks:
+  minecraft-network:
+    external: true
