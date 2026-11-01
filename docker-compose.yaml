@@ -1,6 +1,6 @@
 services:
   milkyway-main:
-    image: ghcr.io/malken21/docker-minecraft-paper:1.20.4-3
+    image: ghcr.io/toro-server/docker-minecraft-paper:1.20.4-3
     container_name: milkyway-main
     restart: unless-stopped
     volumes:
