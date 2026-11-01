@@ -1,8 +1,12 @@
 services:
   milkyway-main:
-    image: ghcr.io/toro-server/docker-minecraft-paper:1.20.4-3
+    image: ghcr.io/toro-server/docker-minecraft-paper:1.20.4-3 #アップデートする場合はこの部分を変更してください。 [Minecraftバージョン名]:[PaperのビルドID]
     container_name: milkyway-main
+    user: 1000:1001
     restart: unless-stopped
+    depends_on:
+      init-chown:
+        condition: service_completed_successfully
     volumes:
       - "./main:/app"
     environment:
@@ -13,6 +17,14 @@ services:
     stop_grace_period: 1m
     networks:
       - minecraft-network
+
+  init-chown:
+    image: alpine
+    container_name: milkyway-main-init
+    volumes:
+      - "./main:/t"
+    command: sh -c "chown -R 1000:1001 /t && chmod -R u+rwX,g+rwX,o-rwx /t"
+
 networks:
   minecraft-network:
     external: true
