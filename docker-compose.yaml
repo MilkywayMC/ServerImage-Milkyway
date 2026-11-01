@@ -1,6 +1,6 @@
 services:
   milkyway-main:
-    image: ghcr.io/malken21/docker-minecraft-paper:1.20.4-3 #アップデートする場合はこの部分を変更してください。 [Minecraftバージョン名]:[PaperのビルドID]
+    image: ghcr.io/toro-server/docker-minecraft-paper:1.20.4-3 #アップデートする場合はこの部分を変更してください。 [Minecraftバージョン名]:[PaperのビルドID]
     container_name: milkyway-main
     user: 1000:1001
     restart: unless-stopped
@@ -23,7 +23,7 @@ services:
     container_name: milkyway-main-init
     volumes:
       - "./main:/t"
-    command: sh -c "chown -R 1000:1001 /t && chmod -R 775 /t"
+    command: sh -c "chown -R 1000:1001 /t && chmod -R u+rwX,g+rwX,o-rwx /t"
 
 networks:
   minecraft-network:
