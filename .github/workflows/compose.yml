@@ -1,0 +1,37 @@
+name: compose
+
+# docker-compose.yaml を変えたら、構文とイメージの決まり (.github/scripts/check-images.py) を確かめる
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docker-compose.yaml'
+      - '.github/scripts/check-images.py'
+      - '.github/workflows/compose.yml'
+  pull_request:
+    paths:
+      - 'docker-compose.yaml'
+      - '.github/scripts/check-images.py'
+      - '.github/workflows/compose.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: compose-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: イメージの決まり
+        run: python3 .github/scripts/check-images.py docker-compose.yaml
+
+      - name: compose の構文
+        run: |
+          # 秘密の env ファイルは git に入れないので、空のものを置く
+          touch .env
+          docker compose config -q

@@ -2,6 +2,9 @@ services:
   milkyway-main:
     image: ghcr.io/toro-server/docker-minecraft-paper:1.20.4-3 #アップデートする場合はこの部分を変更してください。 [Minecraftバージョン名]:[PaperのビルドID]
     container_name: milkyway-main
+    labels:
+      # toro-main と同じ deploy.sh の対象外 (止まると困る)
+      toro.deploy.protected: "true"
     user: 1000:1001
     restart: unless-stopped
     depends_on:
@@ -19,7 +22,7 @@ services:
       - minecraft-network
 
   init-chown:
-    image: alpine
+    image: alpine:3.24.3@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a
     container_name: milkyway-main-init
     volumes:
       - "./main:/t"
