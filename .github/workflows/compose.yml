@@ -1,16 +1,18 @@
 name: compose
 
-# docker-compose.yaml を変えたら、構文とイメージの決まり (.github/scripts/check-images.py) を確かめる
+# docker-compose.yaml やスクリプトを変えたら、構文とイメージの決まり (.github/scripts/check-images.py) を確かめる
 on:
   push:
     branches: [main]
     paths:
       - 'docker-compose.yaml'
+      - '*.sh'
       - '.github/scripts/check-images.py'
       - '.github/workflows/compose.yml'
   pull_request:
     paths:
       - 'docker-compose.yaml'
+      - '*.sh'
       - '.github/scripts/check-images.py'
       - '.github/workflows/compose.yml'
 
@@ -26,6 +28,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
 
       - name: イメージの決まり
         run: python3 .github/scripts/check-images.py docker-compose.yaml
@@ -35,3 +39,12 @@ jobs:
           # 秘密の env ファイルは git に入れないので、空のものを置く
           touch .env
           docker compose config -q
+
+      - name: スクリプトの決まり
+        run: |
+          shellcheck -S warning ./*.sh
+          # イメージの固定と権限は compose で決める。スクリプトからコンテナを直接動かさない
+          if grep -nE 'docker(-compose| compose)?[[:space:]]+run([[:space:]]|$)' ./*.sh; then
+            echo "スクリプトで docker run を使わない"
+            exit 1
+          fi

@@ -1,6 +1,7 @@
 services:
   milkyway-main:
-    image: ghcr.io/toro-server/docker-minecraft-paper:1.20.4-3 #アップデートする場合はこの部分を変更してください。 [Minecraftバージョン名]:[PaperのビルドID]
+    # タグは後から動かせるので、@sha256: で中身まで固定する。アップデートする場合はタグと @sha256: の両方を変更してください。 [Minecraftバージョン名]:[PaperのビルドID]@sha256:[digest]
+    image: ghcr.io/toro-server/docker-minecraft-paper:1.20.4-3@sha256:e19c6c77473b8e1aa5e5013717591583ac1f2c8135208a604d4e2020015483bf
     container_name: milkyway-main
     labels:
       # toro-main と同じ deploy.sh の対象外 (止まると困る)

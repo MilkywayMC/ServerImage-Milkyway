@@ -1,12 +1,13 @@
 version: 2
 updates:
-  # 自前以外のイメージ (タグと @sha256: の両方を直す)。Paper のイメージ (ghcr.io/toro-server/*) は手で上げる
+  # 自前以外のイメージ (タグと @sha256: の両方を直す)。Paper のイメージは手で上げる (タグと @sha256: の両方)
   - package-ecosystem: docker-compose
     directory: /
     schedule:
       interval: weekly
     ignore:
       - dependency-name: 'ghcr.io/toro-server/*'
+      - dependency-name: 'toro-server/*'
 
   - package-ecosystem: github-actions
     directory: /
