@@ -1,6 +1,6 @@
 services:
   milkyway-main:
-    image: ghcr.io/toro-server/docker-minecraft-paper:1.20.4-3 #アップデートする場合はこの部分を変更してください。 [Minecraftバージョン名]:[PaperのビルドID]
+    image: ghcr.io/toro-server/docker-minecraft-paper:26.3-239 #アップデートする場合はこの部分を変更してください。 [Minecraftバージョン名]:[PaperのビルドID]
     container_name: milkyway-main
     labels:
       # toro-main と同じ deploy.sh の対象外 (止まると困る)
