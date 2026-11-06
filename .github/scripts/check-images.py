@@ -3,14 +3,13 @@
 
   1. build: を使わない (本番でイメージを作らない。GitHub Actions が作ったものを使う)
   2. すべてのイメージにタグがあり、latest ではない
-  3. ghcr.io/toro-server/ (自前) 以外は @sha256: で中身まで固定する
+  3. すべて @sha256: で中身まで固定する (タグは後から動かせる)
 
 使い方: python3 scripts/check-images.py [compose ファイル...]  (既定は docker-compose.yaml)
 """
 import re
 import sys
 
-OWN = "ghcr.io/toro-server/"
 DIGEST = re.compile(r"@sha256:[0-9a-f]{64}$")
 
 
@@ -30,8 +29,8 @@ def problems(path):
             yield no, f"{ref}: タグが無い"
         elif tag == "latest":
             yield no, f"{ref}: latest は使わない"
-        elif not ref.startswith(OWN) and not DIGEST.search(ref):
-            yield no, f"{ref}: 自前以外は @sha256: で固定する"
+        elif not DIGEST.search(ref):
+            yield no, f"{ref}: @sha256: で固定する"
 
 
 def main():
